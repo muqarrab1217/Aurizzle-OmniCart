@@ -1,0 +1,77 @@
+==========================================
+RENAME THIS FILE TO: .env
+==========================================
+
+Copy the content below and create a file named ".env" in the "OmniCart Backend" folder:
+
+PORT=5000
+MONGODB_URI=mongodb://localhost:27017/omnicart
+JWT_SECRET=omnicart_super_secret_jwt_key_change_this_in_production_2024
+JWT_EXPIRE=7d
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+
+==========================================
+INSTRUCTIONS:
+==========================================
+
+1. Create a new file in "OmniCart Backend" folder
+2. Name it exactly: .env (with the dot at the beginning)
+3. Copy the 6 lines above (PORT through CLIENT_URL)
+4. Save the file
+
+==========================================
+CONFIGURATION EXPLAINED:
+==========================================
+
+PORT=5000
+  → The port number your backend server will run on
+  → Change this if port 5000 is already in use
+
+MONGODB_URI=mongodb://localhost:27017/omnicart
+  → MongoDB connection string for local database
+  → If using MongoDB Atlas (cloud), replace with your Atlas connection string:
+    mongodb+srv://username:password@cluster.mongodb.net/omnicart
+
+JWT_SECRET=omnicart_super_secret_jwt_key_change_this_in_production_2024
+  → Secret key for JWT token generation
+  → IMPORTANT: Change this to a random, secure string in production!
+  → Generate a secure one: Run `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+
+JWT_EXPIRE=7d
+  → How long JWT tokens remain valid (7 days)
+  → You can change to: 1d, 30d, 12h, etc.
+
+NODE_ENV=development
+  → Environment mode (development or production)
+  → Change to "production" when deploying
+
+CLIENT_URL=http://localhost:3000
+  → Your frontend URL for CORS configuration
+  → Change to your frontend URL (e.g., https://yourdomain.com)
+
+==========================================
+FOR PRODUCTION:
+==========================================
+
+When deploying to production, update these values:
+
+PORT=5000
+MONGODB_URI=mongodb+srv://your-username:your-password@cluster.mongodb.net/omnicart?retryWrites=true&w=majority
+JWT_SECRET=use_a_very_strong_random_secret_key_here_at_least_32_characters_long
+JWT_EXPIRE=7d
+NODE_ENV=production
+CLIENT_URL=https://your-frontend-domain.com
+
+==========================================
+SECURITY NOTES:
+==========================================
+
+1. NEVER commit .env file to Git (it's already in .gitignore)
+2. Change JWT_SECRET to a strong, random value in production
+3. Use environment variables in your hosting platform
+4. Keep your MongoDB credentials secure
+5. Use HTTPS in production
+
+==========================================
+
