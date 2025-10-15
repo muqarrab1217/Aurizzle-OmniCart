@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useMemo, useState, useEffect } from "react"
 import { Eye, Truck, Package, MapPin, Calendar, DollarSign } from "lucide-react"
+import { getImageUrl } from "@/lib/utils"
 import type { Order } from "@/lib/types"
 
 export default function OrdersPage() {
@@ -283,7 +284,7 @@ export default function OrdersPage() {
                       const imageUrl = productImage 
                         ? (productImage.startsWith('http') 
                             ? productImage 
-                            : `http://localhost:5000${productImage}`)
+                            : getImageUrl(productImage))
                         : "/placeholder.svg"
                       
                       return (

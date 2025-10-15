@@ -6,6 +6,16 @@ const connectDB = require('./config/db');
 // Load env vars
 dotenv.config();
 
+// Ensure required environment variables are set
+const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
+const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+
+if (missingEnvVars.length > 0) {
+  console.error(`❌ Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  console.error('Please set these variables in your .env file or environment configuration.');
+  process.exit(1);
+}
+
 // Connect to database
 connectDB();
 
@@ -30,7 +40,8 @@ app.use('/uploads', express.static('public/uploads'));
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:5000',
-  process.env.CLIENT_URL
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL
 ].filter(Boolean);
 
 app.use(cors({

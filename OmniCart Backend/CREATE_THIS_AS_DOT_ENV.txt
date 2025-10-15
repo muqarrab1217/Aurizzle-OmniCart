@@ -4,12 +4,23 @@ RENAME THIS FILE TO: .env
 
 Copy the content below and create a file named ".env" in the "OmniCart Backend" folder:
 
+# For Development (Local)
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/omnicart
 JWT_SECRET=omnicart_super_secret_jwt_key_change_this_in_production_2024
 JWT_EXPIRE=7d
 NODE_ENV=development
 CLIENT_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3000
+
+# For Production (Render.com)
+# PORT=5000
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/omnicart?retryWrites=true&w=majority
+# JWT_SECRET=your_very_secure_jwt_secret_key_here_at_least_32_characters_long
+# JWT_EXPIRE=7d
+# NODE_ENV=production
+# CLIENT_URL=https://your-frontend-domain.com
+# FRONTEND_URL=https://your-frontend-domain.com
 
 ==========================================
 INSTRUCTIONS:

@@ -38,7 +38,7 @@ export default function SignupPage() {
       
       // Provide more specific error messages
       if (err.message === "Failed to fetch" || err.message.includes("fetch")) {
-        setError("Cannot connect to server. Please make sure the backend is running on http://localhost:5000")
+        setError("Cannot connect to server. Please check your internet connection and try again.")
       } else if (err.message) {
         setError(err.message)
       } else {

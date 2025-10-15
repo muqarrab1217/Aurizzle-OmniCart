@@ -5,6 +5,7 @@ import { Minus, Plus, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
+import { getImageUrl } from "@/lib/utils"
 
 export default function CartItem({ id }: { id: string }) {
   const line = useCartStore((s) => s.items.find((i) => i.product.id === id))
@@ -23,7 +24,7 @@ export default function CartItem({ id }: { id: string }) {
   const imageUrl = line.product.image 
     ? (line.product.image.startsWith('http') 
         ? line.product.image 
-        : `http://localhost:5000${line.product.image}`)
+        : getImageUrl(line.product.image))
     : "/placeholder.svg"
 
   return (

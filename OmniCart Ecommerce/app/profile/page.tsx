@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useAuthStore } from "@/stores/auth-store"
 import { useShopStore } from "@/stores/shop-store"
+import { getImageUrl } from "@/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -304,7 +305,7 @@ export default function ProfilePage() {
               <div className="relative">
                 {profilePhoto || photoPreview ? (
                   <img 
-                    src={photoPreview || `http://localhost:5000${profilePhoto}`} 
+                    src={photoPreview || getImageUrl(profilePhoto)} 
                     alt="Profile" 
                     className="h-20 w-20 rounded-full object-cover"
                   />
@@ -350,7 +351,7 @@ export default function ProfilePage() {
               <div className="relative">
                 {photoPreview || profilePhoto ? (
                   <img 
-                    src={photoPreview || `http://localhost:5000${profilePhoto}`} 
+                    src={photoPreview || getImageUrl(profilePhoto)} 
                     alt="Profile preview" 
                     className="h-32 w-32 rounded-full object-cover border-2 border-border"
                   />

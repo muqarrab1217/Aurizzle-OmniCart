@@ -9,6 +9,7 @@ import { useOrderStore, getEtaDate } from "@/stores/order-store"
 import { useProductsStore } from "@/stores/products-store"
 import { useAuthStore } from "@/stores/auth-store"
 import { useState, useEffect } from "react"
+import { getImageUrl } from "@/lib/utils"
 import { useSearchParams } from "next/navigation"
 import { ArrowLeft, Star, Truck, Shield, RotateCcw } from "lucide-react"
 
@@ -30,7 +31,7 @@ function ProductCard({ product }: { product: any }) {
   const imageUrl = product.image 
     ? (product.image.startsWith('http') 
         ? product.image 
-        : `http://localhost:5000${product.image}`)
+        : getImageUrl(product.image))
     : "/placeholder.svg?height=300&width=300&query=product"
   
   return (
@@ -97,7 +98,7 @@ export default function ProductDetailsPage() {
   const mainImageUrl = product.image 
     ? (product.image.startsWith('http') 
         ? product.image 
-        : `http://localhost:5000${product.image}`)
+        : getImageUrl(product.image))
     : "/placeholder.svg?height=800&width=800&query=product image"
 
   return (

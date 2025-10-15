@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { useProductsStore } from "../../../stores/products-store"
 import { useAuthStore } from "../../../stores/auth-store"
 import type { Product } from "../../../lib/types"
+import { getImageUrl } from "../../../lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
 import { Input } from "../../../components/ui/input"
 import { Button } from "../../../components/ui/button"
@@ -252,7 +253,7 @@ export default function ManagerProductsPage() {
               {(imagePreview || draft.image) && (
                 <div className="h-32 w-32 rounded-lg border-2 border-border overflow-hidden bg-muted flex items-center justify-center">
                   <img 
-                    src={imagePreview || (draft.image.startsWith('http') ? draft.image : `http://localhost:5000${draft.image}`)} 
+                    src={imagePreview || (draft.image.startsWith('http') ? draft.image : getImageUrl(draft.image))} 
                     alt="Product preview" 
                     className="h-full w-full object-cover"
                     onError={(e) => {
@@ -513,7 +514,7 @@ function ManagerProductCard({
   const imageUrl = product.image 
     ? (product.image.startsWith('http') 
         ? product.image 
-        : `http://localhost:5000${product.image}`)
+        : getImageUrl(product.image))
     : "/placeholder.svg"
 
   return (

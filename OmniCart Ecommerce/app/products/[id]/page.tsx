@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useCartStore } from "@/stores/cart-store"
 import { useOrderStore, getEtaDate } from "@/stores/order-store"
+import { getImageUrl } from "@/lib/utils"
 import { useProductsStore } from "@/stores/products-store"
 import { useAuthStore } from "@/stores/auth-store"
 
@@ -36,7 +37,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   const imageUrl = product.image 
     ? (product.image.startsWith('http') 
         ? product.image 
-        : `http://localhost:5000${product.image}`)
+        : getImageUrl(product.image))
     : "/placeholder.svg?height=800&width=800&query=product image"
 
   return (

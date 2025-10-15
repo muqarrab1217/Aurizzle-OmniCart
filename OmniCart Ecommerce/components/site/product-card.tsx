@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useCartStore } from "@/stores/cart-store"
 import { useRouter } from "next/navigation"
+import { getImageUrl } from "@/lib/utils"
 
 export default function ProductCard({ product }: { product: Product }) {
   const add = useCartStore((s) => s.add)
@@ -18,7 +19,7 @@ export default function ProductCard({ product }: { product: Product }) {
   const imageUrl = product.image 
     ? (product.image.startsWith('http') 
         ? product.image 
-        : `http://localhost:5000${product.image}`)
+        : getImageUrl(product.image))
     : "/placeholder.svg"
 
   return (
