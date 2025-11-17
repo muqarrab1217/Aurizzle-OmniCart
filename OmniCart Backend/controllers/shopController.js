@@ -1,5 +1,17 @@
 const Shop = require('../models/Shop');
 const User = require('../models/User');
+const { syncProductsJson, syncShopsJson } = require('../services/dataSyncService');
+const { refreshKnowledgeBase } = require('../services/ragService');
+
+async function refreshShopKnowledge() {
+  try {
+    const productsPayload = await syncProductsJson();
+    await syncShopsJson(productsPayload);
+    await refreshKnowledgeBase();
+  } catch (error) {
+    console.error('⚠️  Failed to refresh shop knowledge data:', error.message);
+  }
+}
 
 // @desc    Register shop for customer (customer becomes manager)
 // @route   POST /api/shops/register
@@ -45,6 +57,10 @@ exports.registerShop = async (req, res) => {
       data: shop,
       message: 'Shop registration submitted! Awaiting admin approval.',
     });
+
+    refreshShopKnowledge().catch((err) =>
+      console.error('⚠️  Deferred shop knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -105,6 +121,10 @@ exports.updateShopStatus = async (req, res) => {
       data: updatedShop,
       message: `Shop ${status} successfully`,
     });
+
+    refreshShopKnowledge().catch((err) =>
+      console.error('⚠️  Deferred shop knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -178,6 +198,10 @@ exports.createShop = async (req, res) => {
       success: true,
       data: shop,
     });
+
+    refreshShopKnowledge().catch((err) =>
+      console.error('⚠️  Deferred shop knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -209,6 +233,10 @@ exports.updateShop = async (req, res) => {
       success: true,
       data: shop,
     });
+
+    refreshShopKnowledge().catch((err) =>
+      console.error('⚠️  Deferred shop knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -237,6 +265,10 @@ exports.deleteShop = async (req, res) => {
       success: true,
       data: {},
     });
+
+    refreshShopKnowledge().catch((err) =>
+      console.error('⚠️  Deferred shop knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,

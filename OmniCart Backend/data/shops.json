@@ -1,0 +1,33 @@
+{
+  "generated_at": "2025-11-17T06:33:39.462Z",
+  "shops": [
+    {
+      "shop_id": "68e90431c1c27e6407248ced",
+      "name": "AurizzleBuys",
+      "owner": "muqarrab ahmed",
+      "description": "Trusted retailer operated by muqarrab ahmed located at satellite town.",
+      "location": "satellite town",
+      "rating": 3.84,
+      "total_products": 5,
+      "url": "/shops/68e90431c1c27e6407248ced",
+      "top_products": [
+        "68e9139ba79b819eb368a28a",
+        "68ea4364861baffe99e5bf41",
+        "68ea4fb189dc755762af3797",
+        "69156028fc25bf2c22ede304",
+        "68ea573989dc755762af37ac"
+      ]
+    },
+    {
+      "shop_id": "69150506d657054a9fca08cc",
+      "name": "muqarrab's shop",
+      "owner": "muqarrab",
+      "description": "Trusted retailer operated by muqarrab located at f block, kataraian, rawalpindi.",
+      "location": "f block, kataraian, rawalpindi",
+      "rating": 0,
+      "total_products": 0,
+      "url": "/shops/69150506d657054a9fca08cc",
+      "top_products": []
+    }
+  ]
+}

@@ -9,6 +9,51 @@ interface ApiResponse<T = any> {
   count?: number;
 }
 
+type AgentActionType = 'navigate' | 'add_to_cart' | 'info';
+
+interface AgentAction {
+  type: AgentActionType;
+  label: string;
+  href?: string;
+  data?: Record<string, unknown>;
+  requiresConfirmation?: boolean;
+}
+
+interface ProductSuggestion {
+  id: string;
+  name: string;
+  url: string;
+  price?: number;
+  currency?: string;
+  image?: string | null;
+  inStock?: boolean;
+  rating?: number;
+  shopName?: string | null;
+  shopUrl?: string | null;
+}
+
+interface ShopSuggestion {
+  id: string;
+  name: string;
+  url: string;
+  owner?: string;
+  rating?: number;
+  location?: string;
+}
+
+interface ChatResponse {
+  reply: string;
+  sources?: Array<{
+    name?: string;
+    url?: string;
+    [key: string]: any;
+  }>;
+  actions?: AgentAction[];
+  products?: ProductSuggestion[];
+  shops?: ShopSuggestion[];
+  intent?: string;
+}
+
 class ApiClient {
   private baseUrl: string;
 
@@ -58,18 +103,33 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
+
+      let parsedBody: any = null;
+      let parseError: unknown = null;
+
+      try {
+        parsedBody = await response.json();
+      } catch (err) {
+        parseError = err;
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || 'An error occurred');
+        const message = parsedBody?.message
+          || parsedBody?.error?.message
+          || `Request failed with status ${response.status}`;
+        throw new Error(message);
+      }
+
+      if (parsedBody === null && parseError) {
+        throw parseError;
       }
 
       // Transform _id to id in the response data
-      if (data.success && data.data) {
-        data.data = this.transformResponse(data.data);
+      if (parsedBody?.success && parsedBody?.data) {
+        parsedBody.data = this.transformResponse(parsedBody.data);
       }
 
-      return data;
+      return parsedBody;
     } catch (error) {
       console.error('API Error:', error);
       throw error;
@@ -225,18 +285,39 @@ class ApiClient {
   }
 
   async uploadProductImage(file: File) {
-    const formData = new FormData();
-    formData.append('image', file);
+    const formData = new FormData()
+    formData.append('image', file)
 
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    
-    return fetch(`${this.baseUrl}/products/upload-image`, {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    const headers: HeadersInit = {}
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+    const response = await fetch(`${this.baseUrl}/products/upload-image`, {
       method: 'POST',
-      headers: {
-        'Authorization': token ? `Bearer ${token}` : '',
-      },
+      headers,
       body: formData,
-    }).then(res => res.json());
+    })
+
+    if (!response.ok) {
+      let errorMessage = 'Unable to upload image. Please try again.'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData?.message || errorMessage
+      } catch {
+        // ignore json parsing issues
+      }
+
+      if (response.status === 401) {
+        errorMessage = 'Session expired. Please sign in again before uploading images.'
+      }
+
+      throw new Error(errorMessage)
+    }
+
+    return response.json()
   }
 
   // Order endpoints
@@ -288,8 +369,17 @@ class ApiClient {
   async getShopAnalytics(shopId: string) {
     return this.request(`/analytics/shops/${shopId}`);
   }
+
+  async sendChatMessage(message: string) {
+    return this.request<ChatResponse>('/chat', {
+      method: 'POST',
+      body: JSON.stringify({ message }),
+    });
+  }
 }
 
 export const api = new ApiClient(API_URL);
 export default api;
+
+export type { AgentAction, ProductSuggestion, ShopSuggestion, ChatResponse };
 

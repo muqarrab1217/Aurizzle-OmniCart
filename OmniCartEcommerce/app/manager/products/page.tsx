@@ -30,7 +30,6 @@ export default function ManagerProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   
   // Image upload states
-  const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>("")
   const [uploadingImage, setUploadingImage] = useState(false)
   
@@ -63,11 +62,12 @@ export default function ManagerProductsPage() {
     }
   }, [managerShopId])
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
+    // Reset the input so the same file can be selected again if needed
+    e.target.value = ""
     if (!file) return
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       toast({
         title: "Invalid file type",
@@ -77,7 +77,6 @@ export default function ManagerProductsPage() {
       return
     }
 
-    // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast({
         title: "File too large",
@@ -87,31 +86,36 @@ export default function ManagerProductsPage() {
       return
     }
 
-    setImageFile(file)
-    // Create preview
     const reader = new FileReader()
     reader.onloadend = () => {
       setImagePreview(reader.result as string)
     }
     reader.readAsDataURL(file)
-  }
 
-  const handleUploadImage = async () => {
-    if (!imageFile) return
-
+    setUploadingImage(true)
     try {
-      setUploadingImage(true)
-      const response = await api.uploadProductImage(imageFile)
-      
-      if (response.success) {
-        setDraft((d) => ({ ...d, image: response.data.imagePath }))
+      const response = await api.uploadProductImage(file)
+      if (response.success && response.data?.imagePath) {
+        const uploadedPath = response.data.imagePath
+        setDraft((d) => ({ ...d, image: uploadedPath }))
+        setImagePreview(getImageUrl(uploadedPath))
         toast({
-          title: "Success",
-          description: "Image uploaded successfully!",
+          title: "Image uploaded",
+          description: "Your product image is ready to use.",
+        })
+      } else {
+        setDraft((d) => ({ ...d, image: "" }))
+        setImagePreview("")
+        toast({
+          title: "Upload failed",
+          description: "Failed to upload image. Please try again.",
+          variant: "destructive",
         })
       }
     } catch (error: any) {
       console.error('Error uploading image:', error)
+      setDraft((d) => ({ ...d, image: "" }))
+      setImagePreview("")
       toast({
         title: "Upload failed",
         description: error.message || 'Failed to upload image',
@@ -167,7 +171,6 @@ export default function ManagerProductsPage() {
           tags: [],
           shopId: managerShopId || "",
         })
-        setImageFile(null)
         setImagePreview("")
         
         // Close modal
@@ -264,36 +267,31 @@ export default function ManagerProductsPage() {
                 </div>
               )}
               <div className="flex-1 space-y-2">
-          <input
-                  type="file"
-                  id="productImage"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                />
-                <div className="flex gap-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
+                  <input
+                    type="file"
+                    id="productImage"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
                     asChild
+                    disabled={uploadingImage}
                   >
-                    <label htmlFor="productImage" className="cursor-pointer">
-                      Choose Image
+                    <label htmlFor="productImage" className="cursor-pointer flex items-center gap-2">
+                      {uploadingImage && <Loader2 className="h-4 w-4 animate-spin" />}
+                      {uploadingImage ? "Uploading..." : "Choose Image"}
                     </label>
                   </Button>
-                  {imageFile && (
-                    <Button 
-                      type="button"
-                      onClick={handleUploadImage} 
-                      disabled={uploadingImage}
-                    >
-                      {uploadingImage ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                      Upload Image
-                    </Button>
-                  )}
+                  {!uploadingImage && draft.image ? (
+                    <span className="text-xs text-green-600">Image uploaded</span>
+                  ) : null}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Upload image (JPG, PNG, GIF, WebP - Max 10MB). The image will be saved to your backend storage.
+                  Select a JPG, PNG, GIF, or WebP image up to 10MB. The image uploads automatically once selected.
                 </p>
               </div>
             </div>

@@ -2,6 +2,18 @@ const Product = require('../models/Product');
 const Shop = require('../models/Shop');
 const path = require('path');
 const fs = require('fs');
+const { syncProductsJson, syncShopsJson } = require('../services/dataSyncService');
+const { refreshKnowledgeBase } = require('../services/ragService');
+
+async function refreshProductKnowledge() {
+  try {
+    const productsPayload = await syncProductsJson();
+    await syncShopsJson(productsPayload);
+    await refreshKnowledgeBase();
+  } catch (error) {
+    console.error('⚠️  Failed to refresh product knowledge data:', error.message);
+  }
+}
 
 // @desc    Upload product image
 // @route   POST /api/products/upload-image
@@ -157,6 +169,10 @@ exports.createProduct = async (req, res) => {
       success: true,
       data: populatedProduct,
     });
+
+    refreshProductKnowledge().catch((err) =>
+      console.error('⚠️  Deferred product knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -196,6 +212,10 @@ exports.updateProduct = async (req, res) => {
       success: true,
       data: product,
     });
+
+    refreshProductKnowledge().catch((err) =>
+      console.error('⚠️  Deferred product knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -232,6 +252,10 @@ exports.deleteProduct = async (req, res) => {
       success: true,
       data: {},
     });
+
+    refreshProductKnowledge().catch((err) =>
+      console.error('⚠️  Deferred product knowledge refresh failed:', err.message)
+    );
   } catch (error) {
     res.status(500).json({
       success: false,

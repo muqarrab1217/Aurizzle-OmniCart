@@ -1,0 +1,292 @@
+{
+  "generated_at": "2025-11-17T06:33:37.396Z",
+  "products": [
+    {
+      "product_id": "68e9139ba79b819eb368a28a",
+      "name": "hjkfd",
+      "description": "gds",
+      "category": "fd",
+      "price": 45,
+      "currency": "USD",
+      "tags": [
+        "fd"
+      ],
+      "shop_id": "68e90431c1c27e6407248ced",
+      "shop_name": "AurizzleBuys",
+      "owner_name": "muqarrab ahmed",
+      "location": "satellite town",
+      "avg_rating": 4,
+      "reviews": [],
+      "similar_products": [
+        "68ea4364861baffe99e5bf41",
+        "68ea4fb189dc755762af3797",
+        "68ea573989dc755762af37ac",
+        "69156028fc25bf2c22ede304"
+      ],
+      "similar_product_details": [
+        {
+          "product_id": "68ea4364861baffe99e5bf41",
+          "name": "aurizzle signature",
+          "url": "/products/68ea4364861baffe99e5bf41",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4fb189dc755762af3797",
+          "name": "room bed cousihens",
+          "url": "/products/68ea4fb189dc755762af3797",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea573989dc755762af37ac",
+          "name": "abc",
+          "url": "/products/68ea573989dc755762af37ac",
+          "price": 1000,
+          "currency": "USD"
+        },
+        {
+          "product_id": "69156028fc25bf2c22ede304",
+          "name": "headphones",
+          "url": "/products/69156028fc25bf2c22ede304",
+          "price": 25,
+          "currency": "USD"
+        }
+      ],
+      "url": "/products/68e9139ba79b819eb368a28a",
+      "shop_url": "/shops/68e90431c1c27e6407248ced",
+      "image": "/placeholder.jpg",
+      "in_stock": true,
+      "last_updated": "2025-10-10T14:09:31.475Z"
+    },
+    {
+      "product_id": "68ea4364861baffe99e5bf41",
+      "name": "aurizzle signature",
+      "description": "blah blah blah",
+      "category": "General",
+      "price": 1200,
+      "currency": "USD",
+      "tags": [],
+      "shop_id": "68e90431c1c27e6407248ced",
+      "shop_name": "AurizzleBuys",
+      "owner_name": "muqarrab ahmed",
+      "location": "satellite town",
+      "avg_rating": 4,
+      "reviews": [],
+      "similar_products": [
+        "68e9139ba79b819eb368a28a",
+        "68ea4fb189dc755762af3797",
+        "68ea573989dc755762af37ac",
+        "69156028fc25bf2c22ede304"
+      ],
+      "similar_product_details": [
+        {
+          "product_id": "68e9139ba79b819eb368a28a",
+          "name": "hjkfd",
+          "url": "/products/68e9139ba79b819eb368a28a",
+          "price": 45,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4fb189dc755762af3797",
+          "name": "room bed cousihens",
+          "url": "/products/68ea4fb189dc755762af3797",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea573989dc755762af37ac",
+          "name": "abc",
+          "url": "/products/68ea573989dc755762af37ac",
+          "price": 1000,
+          "currency": "USD"
+        },
+        {
+          "product_id": "69156028fc25bf2c22ede304",
+          "name": "headphones",
+          "url": "/products/69156028fc25bf2c22ede304",
+          "price": 25,
+          "currency": "USD"
+        }
+      ],
+      "url": "/products/68ea4364861baffe99e5bf41",
+      "shop_url": "/shops/68e90431c1c27e6407248ced",
+      "image": "/placeholder.jpg",
+      "in_stock": true,
+      "last_updated": "2025-10-11T11:45:40.972Z"
+    },
+    {
+      "product_id": "68ea4fb189dc755762af3797",
+      "name": "room bed cousihens",
+      "description": "helloo",
+      "category": "General",
+      "price": 1200,
+      "currency": "USD",
+      "tags": [],
+      "shop_id": "68e90431c1c27e6407248ced",
+      "shop_name": "AurizzleBuys",
+      "owner_name": "muqarrab ahmed",
+      "location": "satellite town",
+      "avg_rating": 3.8,
+      "reviews": [],
+      "similar_products": [
+        "68e9139ba79b819eb368a28a",
+        "68ea4364861baffe99e5bf41",
+        "68ea573989dc755762af37ac",
+        "69156028fc25bf2c22ede304"
+      ],
+      "similar_product_details": [
+        {
+          "product_id": "68e9139ba79b819eb368a28a",
+          "name": "hjkfd",
+          "url": "/products/68e9139ba79b819eb368a28a",
+          "price": 45,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4364861baffe99e5bf41",
+          "name": "aurizzle signature",
+          "url": "/products/68ea4364861baffe99e5bf41",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea573989dc755762af37ac",
+          "name": "abc",
+          "url": "/products/68ea573989dc755762af37ac",
+          "price": 1000,
+          "currency": "USD"
+        },
+        {
+          "product_id": "69156028fc25bf2c22ede304",
+          "name": "headphones",
+          "url": "/products/69156028fc25bf2c22ede304",
+          "price": 25,
+          "currency": "USD"
+        }
+      ],
+      "url": "/products/68ea4fb189dc755762af3797",
+      "shop_url": "/shops/68e90431c1c27e6407248ced",
+      "image": "/modern-tech-product.png",
+      "in_stock": true,
+      "last_updated": "2025-10-11T12:38:09.810Z"
+    },
+    {
+      "product_id": "68ea573989dc755762af37ac",
+      "name": "abc",
+      "description": "wtgf",
+      "category": "electronics",
+      "price": 1000,
+      "currency": "USD",
+      "tags": [
+        "electronics",
+        "bedroom"
+      ],
+      "shop_id": "68e90431c1c27e6407248ced",
+      "shop_name": "AurizzleBuys",
+      "owner_name": "muqarrab ahmed",
+      "location": "satellite town",
+      "avg_rating": 3.6,
+      "reviews": [],
+      "similar_products": [
+        "68e9139ba79b819eb368a28a",
+        "68ea4364861baffe99e5bf41",
+        "68ea4fb189dc755762af3797",
+        "69156028fc25bf2c22ede304"
+      ],
+      "similar_product_details": [
+        {
+          "product_id": "68e9139ba79b819eb368a28a",
+          "name": "hjkfd",
+          "url": "/products/68e9139ba79b819eb368a28a",
+          "price": 45,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4364861baffe99e5bf41",
+          "name": "aurizzle signature",
+          "url": "/products/68ea4364861baffe99e5bf41",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4fb189dc755762af3797",
+          "name": "room bed cousihens",
+          "url": "/products/68ea4fb189dc755762af3797",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "69156028fc25bf2c22ede304",
+          "name": "headphones",
+          "url": "/products/69156028fc25bf2c22ede304",
+          "price": 25,
+          "currency": "USD"
+        }
+      ],
+      "url": "/products/68ea573989dc755762af37ac",
+      "shop_url": "/shops/68e90431c1c27e6407248ced",
+      "image": "/uploads/products/product-1760188214711.jpeg",
+      "in_stock": true,
+      "last_updated": "2025-10-11T13:10:17.892Z"
+    },
+    {
+      "product_id": "69156028fc25bf2c22ede304",
+      "name": "headphones",
+      "description": "these are wireless headphones for brand jdot",
+      "category": "headphon electronics",
+      "price": 25,
+      "currency": "USD",
+      "tags": [
+        "headphon electronics"
+      ],
+      "shop_id": "68e90431c1c27e6407248ced",
+      "shop_name": "AurizzleBuys",
+      "owner_name": "muqarrab ahmed",
+      "location": "satellite town",
+      "avg_rating": 3.8,
+      "reviews": [],
+      "similar_products": [
+        "68e9139ba79b819eb368a28a",
+        "68ea4364861baffe99e5bf41",
+        "68ea4fb189dc755762af3797",
+        "68ea573989dc755762af37ac"
+      ],
+      "similar_product_details": [
+        {
+          "product_id": "68e9139ba79b819eb368a28a",
+          "name": "hjkfd",
+          "url": "/products/68e9139ba79b819eb368a28a",
+          "price": 45,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4364861baffe99e5bf41",
+          "name": "aurizzle signature",
+          "url": "/products/68ea4364861baffe99e5bf41",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea4fb189dc755762af3797",
+          "name": "room bed cousihens",
+          "url": "/products/68ea4fb189dc755762af3797",
+          "price": 1200,
+          "currency": "USD"
+        },
+        {
+          "product_id": "68ea573989dc755762af37ac",
+          "name": "abc",
+          "url": "/products/68ea573989dc755762af37ac",
+          "price": 1000,
+          "currency": "USD"
+        }
+      ],
+      "url": "/products/69156028fc25bf2c22ede304",
+      "shop_url": "/shops/68e90431c1c27e6407248ced",
+      "image": "/uploads/products/product-1763008510310.jpeg",
+      "in_stock": true,
+      "last_updated": "2025-11-13T04:35:52.384Z"
+    }
+  ]
+}

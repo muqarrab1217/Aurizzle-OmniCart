@@ -10,7 +10,13 @@ const connectDB = async () => {
       socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
     };
 
-    const conn = await mongoose.connect(process.env.MONGO_URI, options);
+    const uri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+    if (!uri) {
+      throw new Error('MongoDB connection string is missing. Set MONGO_URI or MONGODB_URI in your environment.');
+    }
+
+    const conn = await mongoose.connect(uri, options);
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     console.log(`📊 Database: ${conn.connection.name}`);
@@ -24,6 +30,8 @@ const connectDB = async () => {
       console.error('\n💡 Check your MongoDB connection string in .env file');
     } else if (error.message.includes('IP')) {
       console.error('\n💡 Make sure your IP is whitelisted in MongoDB Atlas Network Access');
+    } else if (error.message.includes('connection string is missing')) {
+      console.error('\n💡 Add MONGO_URI or MONGODB_URI to your environment configuration.');
     }
     
     console.error('\n📖 For MongoDB Atlas setup guide, see: MONGODB_ATLAS_SETUP.md\n');

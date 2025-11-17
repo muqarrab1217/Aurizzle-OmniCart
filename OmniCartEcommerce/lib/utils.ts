@@ -15,6 +15,7 @@ export function getImageUrl(imagePath: string): string {
   }
   
   // Otherwise, prepend the backend URL
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://aurizzle-omnicart.onrender.com';
-  return `${backendUrl}${imagePath}`;
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'https://aurizzle-omnicart.onrender.com';
+  const backendBase = apiBase.endsWith('/api') ? apiBase.slice(0, -4) : apiBase;
+  return `${backendBase}${imagePath}`;
 }

@@ -41,7 +41,6 @@ export default function ProductsAdminPage() {
   const [actionLoading, setActionLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
-  const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string>("")
   const [uploadingImage, setUploadingImage] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -56,58 +55,52 @@ export default function ProductsAdminPage() {
 
   const canEdit = user?.role === "manager" || user?.role === "super-admin"
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) {
-      // Validate file size (10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        toast({
-          title: "File too large",
-          description: "Image size must be less than 10MB",
-          variant: "destructive",
-        })
-        return
-      }
+    e.target.value = ""
+    if (!file) return
 
-      // Validate file type
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
-      if (!allowedTypes.includes(file.type)) {
-        toast({
-          title: "Invalid file type",
-          description: "Only image files (JPEG, PNG, GIF, WebP) are allowed",
-          variant: "destructive",
-        })
-        return
-      }
-
-      setImageFile(file)
-      
-      // Create preview
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+    if (file.size > 10 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Image size must be less than 10MB",
+        variant: "destructive",
+      })
+      return
     }
-  }
 
-  const handleUploadImage = async () => {
-    if (!imageFile) return
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: "Invalid file type",
+        description: "Only image files (JPEG, PNG, GIF, WebP) are allowed",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
 
     setUploadingImage(true)
     setErrorMessage("")
 
     try {
-      const response = await api.uploadProductImage(imageFile)
-      if (response.success) {
-        setForm({ ...form, image: response.data.imagePath })
-        setImagePreview("")
-        setImageFile(null)
+      const response = await api.uploadProductImage(file)
+      if (response.success && response.data?.imagePath) {
+        const uploadedPath = response.data.imagePath
+        setForm({ ...form, image: uploadedPath })
+        setImagePreview(getImageUrl(uploadedPath))
         toast({
-          title: "Success",
-          description: "Product image uploaded successfully!",
+          title: "Image uploaded",
+          description: "The product image has been uploaded successfully.",
         })
       } else {
+        setForm({ ...form, image: "" })
+        setImagePreview("")
         toast({
           title: "Upload failed",
           description: "Failed to upload image. Please try again.",
@@ -116,6 +109,8 @@ export default function ProductsAdminPage() {
       }
     } catch (error: any) {
       console.error("Upload image error:", error)
+      setForm({ ...form, image: "" })
+      setImagePreview("")
       toast({
         title: "Upload error",
         description: error.message || "An error occurred while uploading image.",
@@ -178,7 +173,6 @@ export default function ProductsAdminPage() {
           })
       setEditingId(null)
           setForm({ ...emptyForm, shopId: managerShop || "shop-1" })
-          setImageFile(null)
           setImagePreview("")
           setIsModalOpen(false)
         } else {
@@ -196,7 +190,6 @@ export default function ProductsAdminPage() {
             description: "Product created successfully!",
           })
           setForm({ ...emptyForm, shopId: managerShop || "shop-1" })
-          setImageFile(null)
           setImagePreview("")
           setIsModalOpen(false)
         } else {
@@ -272,7 +265,6 @@ export default function ProductsAdminPage() {
       tags: p.tags || [],
       shopId: p.shopId,
     })
-    setImageFile(null)
     setImagePreview("")
     setIsModalOpen(true)
   }
@@ -280,7 +272,6 @@ export default function ProductsAdminPage() {
   const cancelEdit = () => {
     setEditingId(null)
     setForm({ ...emptyForm, shopId: managerShop || "shop-1" })
-    setImageFile(null)
     setImagePreview("")
     setIsModalOpen(false)
   }
@@ -350,30 +341,24 @@ export default function ProductsAdminPage() {
                     onChange={handleImageChange}
                     className="hidden"
                   />
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-3">
                     <Button 
                       type="button" 
                       variant="outline" 
                       asChild
-                      disabled={actionLoading}
+                      disabled={uploadingImage || actionLoading}
                     >
-                      <label htmlFor="productImage" className="cursor-pointer">
-                        Choose Image
+                      <label htmlFor="productImage" className="cursor-pointer flex items-center gap-2">
+                        {uploadingImage && <Loader2 className="h-4 w-4 animate-spin" />}
+                        {uploadingImage ? "Uploading..." : "Choose Image"}
                       </label>
                     </Button>
-                    {imageFile && (
-                      <Button 
-                        type="button"
-                        onClick={handleUploadImage} 
-                        disabled={uploadingImage || actionLoading}
-                      >
-                        {uploadingImage ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                        Upload Image
-                      </Button>
-                    )}
+                    {!uploadingImage && form.image ? (
+                      <span className="text-xs text-green-600">Image uploaded</span>
+                    ) : null}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Upload image (JPG, PNG, GIF, WebP - Max 10MB). The image will be saved to your backend storage.
+                    Select a JPG, PNG, GIF, or WebP image up to 10MB. The image uploads automatically once selected.
                   </p>
                 </div>
               </div>

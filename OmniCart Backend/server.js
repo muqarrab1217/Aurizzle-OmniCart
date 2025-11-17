@@ -1,13 +1,29 @@
+// Suppress punycode deprecation warning
+process.removeAllListeners('warning');
+process.on('warning', (warning) => {
+  if (warning.name === 'DeprecationWarning' && warning.message.includes('punycode')) {
+    return; // Suppress punycode deprecation warnings
+  }
+  console.warn(warning.name, warning.message);
+});
+
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const { syncAllData } = require('./services/dataSyncService');
+const { refreshKnowledgeBase } = require('./services/ragService');
 
 // Load env vars
 dotenv.config();
 
+// Support legacy MONGO_URI env variable names
+if (!process.env.MONGODB_URI && process.env.MONGO_URI) {
+  process.env.MONGODB_URI = process.env.MONGO_URI;
+}
+
 // Ensure required environment variables are set
-const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
+const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
@@ -19,6 +35,16 @@ if (missingEnvVars.length > 0) {
 // Connect to database
 connectDB();
 
+// Initialize data exports and knowledge base asynchronously
+(async () => {
+  try {
+    await syncAllData();
+    await refreshKnowledgeBase();
+  } catch (error) {
+    console.error('⚠️  Failed to initialize knowledge base:', error.message);
+  }
+})();
+
 // Route files
 const authRoutes = require('./routes/authRoutes');
 const shopRoutes = require('./routes/shopRoutes');
@@ -26,6 +52,7 @@ const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const userRoutes = require('./routes/userRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
@@ -68,6 +95,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check route
 app.get('/api/health', (req, res) => {
@@ -99,13 +127,38 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
-  console.log(`
+// Function to find available port
+const findAvailablePort = (startPort) => {
+  return new Promise((resolve, reject) => {
+    const server = require('http').createServer();
+    
+    server.listen(startPort, () => {
+      const port = server.address().port;
+      server.close(() => resolve(port));
+    });
+    
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        resolve(findAvailablePort(startPort + 1));
+      } else {
+        reject(err);
+      }
+    });
+  });
+};
+
+// Start server with port conflict handling
+const startServer = async () => {
+  try {
+    const availablePort = await findAvailablePort(PORT);
+    
+    const server = app.listen(availablePort, () => {
+      console.log(`
 ╔════════════════════════════════════════╗
 ║     OmniCart Backend API Server        ║
 ║                                        ║
 ║  Status: Running                       ║
-║  Port: ${PORT}                          ║
+║  Port: ${availablePort}                          ║
 ║  Environment: ${process.env.NODE_ENV || 'development'}          ║
 ║                                        ║
 ║  API Endpoints:                        ║
@@ -122,14 +175,35 @@ const server = app.listen(PORT, () => {
 ║  - http://localhost:3000               ║
 ║  - http://localhost:5000               ║
 ╚════════════════════════════════════════╝
-  `);
-});
+      `);
+    });
+
+    // Handle server errors
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`⚠️  Port ${availablePort} is in use, trying next available port...`);
+        startServer();
+      } else {
+        console.error('❌ Server error:', err);
+        process.exit(1);
+      }
+    });
+
+    return server;
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
   console.log(`Error: ${err.message}`);
   // Close server & exit process
-  server.close(() => process.exit(1));
+  // In case server is not initialized due to dynamic startup, exit directly
+  process.exit(1);
 });
 
 module.exports = app;
